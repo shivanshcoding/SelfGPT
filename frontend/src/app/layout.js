@@ -35,6 +35,8 @@ export const metadata = {
   },
 };
 
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 export default function RootLayout({ children }) {
   return (
     <html
@@ -47,7 +49,9 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] font-[var(--font-inter)] antialiased transition-colors duration-200">
         <ThemeInitializer />
-        {children}
+        <TooltipProvider>
+          {children}
+        </TooltipProvider>
         <Toaster position="top-center" richColors />
       </body>
     </html>

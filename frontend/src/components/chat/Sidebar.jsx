@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, MessageSquare, PanelLeftClose, PanelLeft, Settings, LogOut, Search } from "lucide-react";
+import { Plus, MessageSquare, PanelLeftClose, PanelLeft, Settings, LogOut, Search, Brain } from "lucide-react";
 import useSidebarStore from "@/stores/sidebarStore";
 import useAuthStore from "@/stores/authStore";
 import { cn } from "@/lib/utils";
@@ -71,6 +71,20 @@ export function Sidebar() {
 
             {/* Chat List */}
             <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 scrollbar-hide">
+              <Link
+                href="/memories"
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors group mb-4",
+                  "text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)]"
+                )}
+              >
+                <Brain size={16} className="text-[var(--color-accent)]" />
+                <span className="truncate flex-1 font-medium text-[var(--color-text)]">Memory Vault</span>
+              </Link>
+              
+              <div className="px-3 mb-2 text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">
+                Recent Chats
+              </div>
               {chats.map((chat) => (
                 <Link
                   key={chat.id}

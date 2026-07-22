@@ -75,6 +75,11 @@ class MessageService:
             attachments=data.attachments or []
         )
         await user_msg.insert()
+        
+        # Extract memories in background
+        from services.memory_service import MemoryService
+        import asyncio
+        asyncio.create_task(MemoryService.extract_memories(user, chat_id, identity.slug, data.content))
 
         # Update chat timestamp
         chat.message_count += 2

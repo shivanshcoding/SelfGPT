@@ -124,9 +124,9 @@ def create_app() -> FastAPI:
         chats,
         messages,
         ws_messages,
+        memory,
     )
     from routers.stubs import (
-        memory_router,
         rag_router,
         uploads_router,
         training_router,
@@ -139,8 +139,8 @@ def create_app() -> FastAPI:
     app.include_router(chats.router)
     app.include_router(messages.router)
     app.include_router(ws_messages.router)
+    app.include_router(memory.router)
     
-    app.include_router(memory_router)
     app.include_router(rag_router)
     app.include_router(uploads_router)
     app.include_router(training_router)

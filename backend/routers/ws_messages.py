@@ -69,6 +69,12 @@ async def chat_stream(websocket: WebSocket, chat_id: str, token: str):
         )
         await user_msg.insert()
 
+        # Extract memories in background
+        from fastapi import BackgroundTasks
+        from services.memory_service import MemoryService
+        import asyncio
+        asyncio.create_task(MemoryService.extract_memories(user, chat_id, identity.slug, user_text))
+
         # Update chat counts
         chat.message_count += 2
         await chat.save()

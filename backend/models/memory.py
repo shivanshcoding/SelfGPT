@@ -1,39 +1,32 @@
 """
-SelfGPT — Memory Document Model
+SelfGPT — Model: Memory
 
-Three scopes: short_term (conversation), long_term (cross-chat), identity (per-identity).
-Users can view, edit, and delete any memory — "forget" is a hard delete.
+Stores extracted facts about the user or the identity's state.
 """
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import datetime
+from pydantic import Field
+from beanie import Document
 from typing import Optional
 
-from beanie import Document, Indexed
-from pydantic import Field
-
-
-class MemoryScope(str, Enum):
-    SHORT_TERM = "short_term"
-    LONG_TERM = "long_term"
-    IDENTITY = "identity"
-
-
 class Memory(Document):
-    """A single remembered fact or preference."""
-
-    user_id: Indexed(str)
-    identity_id: Optional[str] = None  # None = global user memory
-    scope: MemoryScope = MemoryScope.LONG_TERM
-    key: str  # What was remembered (e.g., "user's favorite color")
-    value: str  # The memory content (e.g., "blue")
-    source_chat_id: Optional[str] = None
-    source_message_id: Optional[str] = None
-    confidence: float = 1.0
+    user_id: str
+    identity_id: Optional[str] = None  # None = global memory across all identities
+    chat_id: Optional[str] = None
+    
+    # The actual extracted fact, e.g., "User is learning React."
+    content: str
+    
+    # "user_preference", "user_fact", "identity_state", "relationship"
+    memory_type: str = "user_fact" 
+    
+    # How important is this memory (1-5)
+    importance_score: int = 1
+    
     is_active: bool = True
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    expires_at: Optional[datetime] = None  # For short-term memories
+    
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
         name = "memories"
-        use_state_management = True
