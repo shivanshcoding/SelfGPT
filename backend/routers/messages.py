@@ -1,0 +1,72 @@
+"""
+SelfGPT — Router: Messages
+
+Message CRUD and feedback endpoints.
+"""
+
+from typing import Optional
+
+from fastapi import APIRouter, Depends, Query, status
+
+from schemas.message import (
+    SendMessageRequest, MessageResponse,
+    MessageFeedbackRequest, EditMessageRequest,
+)
+from core.dependencies import get_current_user
+from models.user import User
+
+router = APIRouter(prefix="/api/chats/{chat_id}/messages", tags=["Messages"])
+
+
+@router.get("/", response_model=list)
+async def list_messages(
+    chat_id: str,
+    user: User = Depends(get_current_user),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    search: Optional[str] = Query(None),
+):
+    """List messages in a chat with pagination and search."""
+    pass
+
+
+@router.post("/", response_model=MessageResponse, status_code=status.HTTP_201_CREATED)
+async def send_message(
+    chat_id: str,
+    data: SendMessageRequest,
+    user: User = Depends(get_current_user),
+):
+    """Send a message and get an AI response (non-streaming fallback)."""
+    pass
+
+
+@router.patch("/{message_id}/feedback", response_model=MessageResponse)
+async def add_feedback(
+    chat_id: str,
+    message_id: str,
+    data: MessageFeedbackRequest,
+    user: User = Depends(get_current_user),
+):
+    """Add rating, reaction, or correction to a message."""
+    pass
+
+
+@router.patch("/{message_id}/edit", response_model=MessageResponse)
+async def edit_message(
+    chat_id: str,
+    message_id: str,
+    data: EditMessageRequest,
+    user: User = Depends(get_current_user),
+):
+    """Edit a user message and regenerate the response."""
+    pass
+
+
+@router.post("/{message_id}/regenerate", response_model=MessageResponse)
+async def regenerate_message(
+    chat_id: str,
+    message_id: str,
+    user: User = Depends(get_current_user),
+):
+    """Regenerate an AI response for a given message."""
+    pass
