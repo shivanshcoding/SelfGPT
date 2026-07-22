@@ -118,11 +118,14 @@ def create_app() -> FastAPI:
 
     # ── Routers ──
     from routers import (
-        auth_router,
-        chats_router,
-        messages_router,
-        identities_router,
-        ws_router,
+        health,
+        identities,
+        auth,
+        chats,
+        messages,
+        ws_messages,
+    )
+    from routers.stubs import (
         memory_router,
         rag_router,
         uploads_router,
@@ -130,11 +133,13 @@ def create_app() -> FastAPI:
         admin_router,
     )
 
-    app.include_router(auth_router)
-    app.include_router(chats_router)
-    app.include_router(messages_router)
-    app.include_router(identities_router)
-    app.include_router(ws_router)
+    app.include_router(health.router)
+    app.include_router(identities.router)
+    app.include_router(auth.router)
+    app.include_router(chats.router)
+    app.include_router(messages.router)
+    app.include_router(ws_messages.router)
+    
     app.include_router(memory_router)
     app.include_router(rag_router)
     app.include_router(uploads_router)
